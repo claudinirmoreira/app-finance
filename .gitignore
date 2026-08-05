@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Builds
+dist/
+build/
+
+# Env
+.env
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Docker
+docker-compose.override.yml
+
+# Tests / coverage
+coverage/

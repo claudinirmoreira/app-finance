@@ -1,0 +1,79 @@
+// Prisma schema for the app-finance personal finance app
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountType {
+  checking
+  savings
+  wallet
+  credit
+  investment
+}
+
+enum TransactionType {
+  income
+  expense
+}
+
+model Account {
+  id             String        @id @default(cuid())
+  name           String
+  type           AccountType   @default(checking)
+  initialBalance Decimal       @default(0) @db.Decimal(12, 2)
+  color          String        @default("#6c5ce7")
+  icon           String        @default("🏦")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  transactions   Transaction[]
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  name         String
+  type         TransactionType
+  color        String        @default("#636e72")
+  icon         String        @default("📁")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  budgets      Budget[]
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  description String
+  amount      Decimal         @db.Decimal(12, 2)
+  type        TransactionType
+  date        DateTime
+  notes       String?
+  accountId   String
+  categoryId  String
+  account     Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category    Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([date])
+  @@index([accountId])
+  @@index([categoryId])
+}
+
+model Budget {
+  id         String   @id @default(cuid())
+  categoryId String
+  amount     Decimal  @db.Decimal(12, 2)
+  month      Int
+  year       Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([categoryId, month, year])
+  @@index([year, month])
+}

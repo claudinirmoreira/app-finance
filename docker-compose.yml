@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: app-finance-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app_finance
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app_finance"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: app-finance-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/app_finance?schema=public
+      PORT: 3333
+      NODE_ENV: production
+      CORS_ORIGIN: http://localhost:5173,http://localhost
+    ports:
+      - "3333:3333"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: app-finance-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

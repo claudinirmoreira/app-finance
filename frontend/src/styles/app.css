@@ -1,0 +1,52 @@
+@import './variables.css';
+@import './base.css';
+@import './layout.css';
+@import './components.css';
+@import './utilities.css';
+
+/* React app specific helpers */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-bg-elevated);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-12);
+  color: var(--color-text-muted);
+}
+
+.error-state {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-danger);
+}
+
+.chart-bar-tooltip {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.income-bar {
+  background: var(--color-success);
+  border-radius: 3px 3px 0 0;
+}
+
+.expense-bar {
+  background: var(--color-danger);
+  border-radius: 3px 3px 0 0;
+}
