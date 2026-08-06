@@ -9,7 +9,12 @@ const apiClient: AxiosInstance = axios.create({
 export function getErrorMessage(err: unknown): string {
   if (axios.isAxiosError(err)) {
     const axiosErr = err as AxiosError<ApiError>;
-    return axiosErr.response?.data?.message ?? 'Erro de conexão com o servidor';
+    const data = axiosErr.response?.data;
+    if (data?.errors) {
+      const first = Object.values(data.errors)[0];
+      if (first) return first;
+    }
+    return data?.message ?? 'Erro de conexão com o servidor';
   }
   return err instanceof Error ? err.message : 'Erro inesperado';
 }
