@@ -9,7 +9,7 @@ const router = Router();
 
 router.get(
   '/',
-  query('type').optional().isIn(['income', 'expense']).withMessage('Tipo inválido'),
+  query('type').optional({ values: 'falsy' }).isIn(['income', 'expense']).withMessage('Tipo inválido'),
   validateErrors,
   asyncHandler(async (req, res) => {
     const type = req.query.type as string | undefined;

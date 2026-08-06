@@ -3,7 +3,10 @@ import type { Transaction, TransactionInput, TransactionQuery } from '../types';
 
 export const transactionApi = {
   async list(query: TransactionQuery = {}): Promise<Transaction[]> {
-    const { data } = await apiClient.get<Transaction[]>('/transactions', { params: query });
+    const params = Object.fromEntries(
+      Object.entries(query).filter(([, v]) => v !== '' && v !== undefined && v !== null)
+    );
+    const { data } = await apiClient.get<Transaction[]>('/transactions', { params });
     return data;
   },
   async get(id: string): Promise<Transaction> {

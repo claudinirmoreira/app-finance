@@ -28,7 +28,7 @@ router.get(
 router.get(
   '/category-totals',
   monthQuery,
-  query('type').optional().isIn(['income', 'expense']),
+  query('type').optional({ values: 'falsy' }).isIn(['income', 'expense']),
   validateErrors,
   asyncHandler(async (req, res) => {
     res.json(

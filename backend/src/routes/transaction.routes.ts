@@ -10,13 +10,13 @@ const router = Router();
 router.get(
   '/',
   [
-    query('year').optional().isInt({ min: 2000, max: 2100 }),
-    query('month').optional().isInt({ min: 1, max: 12 }),
-    query('search').optional().isString(),
-    query('type').optional().isIn(['income', 'expense']),
-    query('categoryId').optional().isString(),
-    query('startDate').optional().isISO8601(),
-    query('endDate').optional().isISO8601(),
+    query('year').optional({ values: 'falsy' }).isInt({ min: 2000, max: 2100 }),
+    query('month').optional({ values: 'falsy' }).isInt({ min: 1, max: 12 }),
+    query('search').optional({ values: 'falsy' }).isString(),
+    query('type').optional({ values: 'falsy' }).isIn(['income', 'expense']),
+    query('categoryId').optional({ values: 'falsy' }).isString(),
+    query('startDate').optional({ values: 'falsy' }).isISO8601(),
+    query('endDate').optional({ values: 'falsy' }).isISO8601(),
   ],
   validateErrors,
   asyncHandler(async (req, res) => {

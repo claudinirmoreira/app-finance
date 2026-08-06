@@ -10,8 +10,8 @@ const router = Router();
 router.get(
   '/',
   [
-    query('year').optional().isInt({ min: 2000, max: 2100 }),
-    query('month').optional().isInt({ min: 1, max: 12 }),
+    query('year').optional({ values: 'falsy' }).isInt({ min: 2000, max: 2100 }),
+    query('month').optional({ values: 'falsy' }).isInt({ min: 1, max: 12 }),
   ],
   validateErrors,
   asyncHandler(async (req, res) => {
